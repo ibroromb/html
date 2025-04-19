@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Құбыла Компасы</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f8ff;
+        }
+
+        #compass-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border: 10px solid #4caf50;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 60px solid #4caf50;
+            transform-origin: bottom center;
+            transform: rotate(0deg);
+        }
+
+        .instructions {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .error {
+            color: red;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Құбыла Компасы</h1>
+    <div id="compass-container">
+        <div id="arrow"></div>
+    </div>
+    <div class="instructions">Телефоныңызды қозғалтыңыз немесе бұрыңыз.</div>
+    <div id="error-message" class="error"></div>
+
+    <script>
+        const qiblaDirection = 58.3; // Алматы қаласы үшін құбыла бағытының бұрышы
+
+        const arrow = document.getElementById('arrow');
+        const errorMessage = document.getElementById('error-message');
+
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', (event) => {
+                const { alpha } = event; // Компастың жалпы бағыты
+
+                if (alpha !== null) {
+                    const qiblaAngle = qiblaDirection - alpha; // Құбылаға бағытты есептеу
+                    arrow.style.transform = `rotate(${qiblaAngle}deg)`;
+                } else {
+                    errorMessage.textContent = 'Құрылғыда компас қолжетімді емес.';
+                }
+            });
+        } else {
+            errorMessage.textContent = 'Құрылғыңыз құбыла компасын қолдамайды.';
+        }
+    </script>
+</body>
+</html>
